@@ -12,15 +12,15 @@ export function resetTextures() {
 
 export function imagePath(input: string): string {
     const cleaned = input.replace(/[^a-zA-Z0-9_-]/g, '');
-    const truncated = cleaned.substring(0, 16);
+    // const truncated = cleaned.substring(0, 16);
     // return `${settings.path}${truncated}.png`;
     return `${settings.path}${input}.png`;
 }
 
 export function variableName(input: string): string {
     const cleaned = input.replace(/[^a-zA-Z0-9_]/g, '');
-    const truncated = cleaned.substring(0, 16);
-    return truncated.toLocaleLowerCase();
+    // const truncated = cleaned.substring(0, 16);
+    return cleaned.toLocaleLowerCase();
 }
 
 export function getTextureVariable(texture: string): string {

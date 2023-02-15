@@ -1,7 +1,10 @@
 import { settings } from "../settings";
 import { Offset, Position } from "../Types";
 import { getPointFromDistanceRotation } from "../useful";
+
 import * as Rectangle from './rectangle';
+import * as Group from './group';
+
 let focusElements: SceneNode[] = [];
 
 export function resetFocusElements() {
@@ -84,7 +87,14 @@ export function processNode(element: SceneNode, offset: Offset): {code: string, 
     let metaCode = '';
     code += `-- ${element.type}: ${element.name}\n`;
 
-    if(isMaskGroup(element)) {
+    if(element.type == 'GROUP' && element.name.startsWith('<single>')) {
+        let name = '_single_' + element.name.slice('<single>'.length);
+        let data = Group.process(element, offset, name);
+        code += data.code;
+        metaCode += data.metaCode;
+
+        addFocusElement(element);
+    } else if(isMaskGroup(element)) {
 
     } else if('children' in element) {
         for(let child of element.children) {

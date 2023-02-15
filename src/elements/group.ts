@@ -2,7 +2,7 @@ import * as Element from './element';
 import * as Textures from './textures';
 import { Offset, Position } from "../Types";
 
-export function process(element: RectangleNode, offset: Offset): {code: string, metaCode: string} {
+export function process(element: GroupNode, offset: Offset, name: string): {code: string, metaCode: string} {
     let code = '';
     let metaCode = '';
     let elementPosition = {
@@ -12,33 +12,20 @@ export function process(element: RectangleNode, offset: Offset): {code: string, 
         height: element.height,
     };
 
-    // Strokes
-    let offSize = 0;
-    if(element.strokeAlign == 'OUTSIDE') {
-        offSize = element.strokeWeight as number;
-    } else if(element.strokeAlign == 'CENTER') {
-        offSize = (element.strokeWeight as number) / 2;
-    }
-
     // Effects
     // @TODO
-
-    elementPosition.x -= offSize;
-    elementPosition.y -= offSize;
-    elementPosition.width += offSize * 2;
-    elementPosition.height += offSize * 2;
 
     // Calculate absolute position depending on rotation
     elementPosition = Element.getAbsolutePosition(elementPosition as Position, element.rotation)
     let position = Element.getPosition(elementPosition, offset);
 
     // Add texture to cache
-    Textures.addTexture(element.name);
+    Textures.addTexture(name);
 
     // Generate code
-    let variable = `textures.${Textures.variableName(element.name)}`;
+    let variable = `textures.${Textures.getTextureVariable(name)}`;
     code = `\tdxDrawImage(${position}, ${variable}.texture)\n`;
-    metaCode = `\t<file src="${Textures.imagePath(element.name)}"/>\n`;
+    metaCode = `\t<file src="${Textures.imagePath(name)}"/>\n`;
 
     return {code, metaCode};
 }
