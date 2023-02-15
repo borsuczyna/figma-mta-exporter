@@ -1,35 +1,44 @@
 import * as Element from './element';
+import * as Textures from './textures';
 import { Offset, Position } from "../Types";
-
 
 export function process(element: RectangleNode, offset: Offset): {code: string, metaCode: string} {
     let code = '';
     let metaCode = '';
-    let elementPosition: Position = {
-        x: element.x + offset.x,
-        y: element.y + offset.y,
-        width: element.width,
-        height: element.height
-    }
+    let elementPosition = element as Position;
 
+    // Strokes
+    let strokeSize = 0;
     if(element.strokeAlign == 'OUTSIDE') {
-        let stroke = element.strokeWeight as number;
-        elementPosition.x -= stroke;
-        elementPosition.y -= stroke;
-        elementPosition.width += stroke * 2;
-        elementPosition.height += stroke * 2;
+        strokeSize = element.strokeWeight as number;
     } else if(element.strokeAlign == 'CENTER') {
-        let stroke = element.strokeWeight as number;
-        elementPosition.x -= stroke/2;
-        elementPosition.y -= stroke/2;
-        elementPosition.width += stroke;
-        elementPosition.height += stroke;
+        strokeSize = (element.strokeWeight as number) / 2;
     }
 
+    // Effects
+    for(let effect of element.effects) {
+        if(effect.type == 'DROP_SHADOW') {
+            
+        }
+    }
+
+    elementPosition.x -= strokeSize;
+    elementPosition.y -= strokeSize;
+    elementPosition.width += strokeSize * 2;
+    elementPosition.height += strokeSize * 2;
+
+    elementPosition = Element.getAbsolutePosition(elementPosition as Position, element.rotation)
     let position = Element.getPosition(elementPosition, offset);
 
-    code = `\tdxDrawImage(${position}, "${Element.imagePath(element.name)}")\n`;
-    metaCode = `\t<file src="${Element.imagePath(element.name)}"/>\n`;
+    Textures.addTexture(element.name);
+
+    let variable = `textures.${Textures.variableName(element.name)}`;
+    code = `\tdxDrawImage(${position}, ${variable}.texture)\n`;
+    metaCode = `\t<file src="${Textures.imagePath(element.name)}"/>\n`;
+
+    if(element.rotation) {
+        // code = Element.generateRotation
+    }
 
     return {code, metaCode};
 }

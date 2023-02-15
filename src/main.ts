@@ -1,5 +1,6 @@
 import translation from "./language";
 import * as Element from './elements/element';
+import * as Textures from './elements/textures';
 import { settings } from "./settings";
 import { Offset, Align } from "./Types";
 
@@ -22,7 +23,7 @@ function exportFrame(frame: FrameNode, align: Align) {
     let code = data.code;
     let metaCode = data.metaCode;
 
-    code = settings.codeTemplate.replace('<CODE>', code);
+    code = settings.codeTemplate.replace('<CODE>', code).replace('<TEXTURES>', Textures.getTexturesCode());
     metaCode = settings.metaTemplate.replace('<FILE_SOURCES>', metaCode);
 
     console.log(metaCode);
@@ -38,6 +39,7 @@ figma.ui.onmessage = msg => {
         let selection: SceneNode = selections[0];
         if(selection.type != 'FRAME') return figma.notify(translation('no-frame'), {error: true});
 
+        Textures.resetTextures();
         Element.resetFocusElements();
         settings.zoom = msg.useZoom;
         exportFrame(selection, msg.align);

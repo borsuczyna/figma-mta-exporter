@@ -1,0 +1,10 @@
+{
+  "name": "MTA-Exporter",
+  "id": "1207349337061286977",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": [
+    "figma"
+  ],
+  "ui": "ui.html"
+}

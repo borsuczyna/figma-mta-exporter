@@ -1,7 +1,12 @@
 import { settings } from "../settings";
 import { Offset, Position } from "../Types";
+import { getPointFromDistanceRotation } from "../useful";
 import * as Rectangle from './rectangle';
 let focusElements: SceneNode[] = [];
+
+export function resetFocusElements() {
+    focusElements = [];
+}
 
 export function isMaskGroup(node: SceneNode): boolean {
     if (node.type === "GROUP") {
@@ -14,8 +19,25 @@ export function isMaskGroup(node: SceneNode): boolean {
     return false;
 }
 
-export function resetFocusElements() {
-    focusElements = [];
+export function getAbsolutePosition(position: Position, angle: number): Position {
+    let lt = {x: position.x, y: position.y};
+    let rt = getPointFromDistanceRotation(position.x, position.y, position.width, angle);
+    let lb = getPointFromDistanceRotation(position.x, position.y, position.height, angle + 90);
+    let rb = getPointFromDistanceRotation(rt.x, rt.y, position.height, angle + 90);
+
+    let x = Math.min(lt.x, rt.x, lb.x, rb.x);
+    let y = Math.min(lt.y, rt.y, lb.y, rb.y);
+    let tx = Math.max(lt.x, rt.x, lb.x, rb.x);
+    let ty = Math.max(lt.y, rt.y, lb.y, rb.y);
+    let width = tx - x;
+    let height = ty - y;
+
+    return {
+        x: x,
+        y: y,
+        width: width,
+        height: height
+    };
 }
 
 function addFocusElement(element: SceneNode) {
@@ -27,15 +49,9 @@ export function focusOnElements(frame: SceneNode) {
     figma.currentPage.selection = focusElements;
 }
 
-export function imagePath(input: string): string {
-    const cleaned = input.replace(/[^a-zA-Z0-9_-]/g, '');
-    const truncated = cleaned.substring(0, 16);
-    return `${settings.path}${truncated}.png`;
-}
-
 export function getPosition(position: Position, offset: Offset): string {
-    let x: string | number = position.x - offset.x;
-    let y: string | number = position.y - offset.y;
+    let x: string | number = position.x;
+    let y: string | number = position.y;
     let width: string | number = position.width;
     let height: string | number = position.height;
     let zoom = settings.zoom ? '/zoom' : '';

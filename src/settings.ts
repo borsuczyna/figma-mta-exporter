@@ -1,14 +1,27 @@
 const metaTemplate = `<meta>
+    <script src='useful.lua' type='client' cache='false'/>
     <script src='client.lua' type='client' cache='false'/>
 
 <FILE_SOURCES>
 </meta>`;
-const codeTemplate = `local sx, sy = guiGetScreenSize()
-local zoom = (sx < 2048) and math.min(2.2, 2048/sx) or 1
-
-addEventHandler('onClientRender', root, function()
+const codeTemplate = `
+function renderUI()
 <CODE>
-end)`;
+end
+
+function toggleUI(visible)
+    local eventCallback = visible and addEventHandler or removeEventHandler
+
+    eventCallback('onClientRender', root, renderUI)
+
+    if visible then
+<TEXTURES>
+    else
+        unloadTextures()
+    end
+end
+
+toggleUI(true)`;
 
 export const settings = {
     zoom: true,
