@@ -1,0 +1,73 @@
+body {
+    background: #1E1E1E;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.blur {
+    filter: blur(15px);
+    position: absolute;
+}
+
+@keyframes rainbow_animation {
+    0%,100% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 100% 0;
+    }
+}
+
+h5 {
+    color: #626262;
+    font-weight: 500;
+}
+
+h2 {
+    color: rgb(205, 205, 205);
+    background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: rainbow_animation 6s ease-in-out infinite;
+    background-size: 400% 100%;
+}
+
+#files {
+    color: #ccc;
+    font-size: 0.8rem;
+    margin-bottom: 0.7rem;
+}
+
+button {
+    background-position: 0;
+    background: linear-gradient(90deg, #262626 0%, #2D2D2D 50%, #262626 100%);
+    background-size: 200% 100%;
+    border: 3px solid #292929;
+    color: #6D6D6D;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-position 0.3s, color 0.3s, text-shadow 0.3s;
+    padding: 0.5rem 1.2rem;
+    border-radius: 0.5rem;
+}
+
+button:hover {
+    background-position: -100%;  
+    color: #a3a3a3;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}

@@ -2,7 +2,7 @@ import * as Element from './element';
 import * as Textures from './textures';
 import { Offset, Position } from "../Types";
 
-export function process(element: GroupNode, offset: Offset, name: string): {code: string, metaCode: string} {
+export function process(element: SceneNode, offset: Offset, name: string): {code: string, metaCode: string} {
     let code = '';
     let metaCode = '';
     let elementPosition = {
@@ -16,7 +16,7 @@ export function process(element: GroupNode, offset: Offset, name: string): {code
     // @TODO
 
     // Calculate absolute position depending on rotation
-    elementPosition = Element.getAbsolutePosition(elementPosition as Position, element.rotation)
+    elementPosition = Element.getAbsolutePosition(elementPosition as Position, 'rotation' in element ? element.rotation : 0);
     let position = Element.getPosition(elementPosition, offset);
 
     // Add texture to cache
