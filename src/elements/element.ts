@@ -144,7 +144,7 @@ export function processNode(element: SceneNode, offset: Offset, variable: string
         metaCode += data.metaCode;
 
         addFocusElement(element);
-    } else if(isMaskGroup(element)) {
+    } else if(isMaskGroup(element) || element.type == 'VECTOR') {
         let data = Raw.process(element, offset, element.name);
         code += data.code;
         metaCode += data.metaCode;
