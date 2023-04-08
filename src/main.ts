@@ -54,6 +54,8 @@ function exportFrame(frame: FrameNode, align: Align) {
         visible: false
     });
 
+    console.log(code);
+
     setTimeout(() => {
         figma.showUI(__html__, {
             title: 'MTA Exporter by borsuk',
