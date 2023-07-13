@@ -1,5 +1,5 @@
-<h2>MTA Exporter</h2>
-<h2 class="blur">MTA Exporter</h2>
+<h2>MTA Exporter 2.0</h2>
+<h2 class="blur">MTA Exporter 2.0</h2>
 <div id="aligns-container">
     align
     <div id="aligns">
@@ -15,8 +15,9 @@
     </div>
 </div>
 <button id="usezoom">use zoom</button>
+<button id="wordwrap">wordwrap / clip</button>
 <button id="export">Export</button>
-<h5>borsuk#2115</h5>
+<h5>discord: @borsuczyna</h5>
 
 <link href="https://fonts.cdnfonts.com/css/inter" rel="stylesheet">
 
@@ -49,14 +50,14 @@
         margin-bottom: 0.5rem;
     }
 
-    #usezoom {
+    #usezoom, #wordwrap {
         margin-bottom: 0.3rem;
         padding: 0.3rem;
         border-radius: 0.4rem;
         font-size: 0.8rem;
     }
 
-    #usezoom.active {
+    #usezoom.active, #wordwrap.active {
         background: linear-gradient(90deg, #373737 0%, #3b3b3b 50%, #373737 100%);
         border: 3px solid #393939;
         color: rgb(147, 147, 147);
@@ -162,9 +163,14 @@
 <script>
 let exportButton = document.getElementById('export');
 let zoomButton = document.getElementById('usezoom');
+let wordWrapButton = document.getElementById('wordwrap');
 let aligns = document.querySelectorAll('.align');
 
 zoomButton.onclick = function() {
+    this.classList.toggle('active');
+}
+
+wordWrapButton.onclick = function() {
     this.classList.toggle('active');
 }
 
@@ -181,6 +187,7 @@ exportButton.onclick = () => {
         pluginMessage: {
             type: 'export-as-code',
             useZoom: zoomButton.classList.contains('active'),
+            wordWrap: wordWrapButton.classList.contains('active'),
             align
         }
     }, '*');

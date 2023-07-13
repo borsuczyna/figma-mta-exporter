@@ -5,9 +5,9 @@ import { settings } from "./settings";
 import { Offset, Align } from "./Types";
 
 figma.showUI(__html__, {
-    title: 'MTA Exporter by borsuk',
+    title: 'MTA Exporter 2.0 by @borsuczyna',
     width: 300,
-    height: 400,
+    height: 450,
     visible: true
 });
 
@@ -24,8 +24,14 @@ function exportFrame(frame: FrameNode, align: Align) {
     let code = data.code;
     let metaCode = data.metaCode;
 
+    // remove last new line from code and metaCode
+    code = code.slice(0, -1);
+    metaCode = metaCode.slice(0, -1);
+
     code = settings.codeTemplate.replace('<CODE>', code).replace('<TEXTURES>', Textures.getTexturesCode()).replace('<VARIABLES>', Element.getVariables());
     metaCode = settings.metaTemplate.replace('<FILE_SOURCES>', metaCode);
+
+    code = code.trim();
 
     figma.showUI(`<script>
     function openURL(url, arguments) {
@@ -54,8 +60,6 @@ function exportFrame(frame: FrameNode, align: Align) {
         visible: false
     });
 
-    console.log(code);
-
     setTimeout(() => {
         figma.showUI(__html__, {
             title: 'MTA Exporter by borsuk',
@@ -81,6 +85,7 @@ figma.ui.onmessage = msg => {
         Element.resetCurrentVariable();
         Element.setMainFrame(selection);
         settings.zoom = msg.useZoom;
+        settings.wordWrap = msg.wordWrap;
         exportFrame(selection, msg.align);
         Element.focusOnElements(selection);
     }

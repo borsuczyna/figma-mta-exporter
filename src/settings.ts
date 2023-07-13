@@ -83,4 +83,5 @@ export const settings = {
     metaTemplate: metaTemplate,
     codeTemplate: codeTemplate,
     usefulCode: usefulCode,
+    wordWrap: false,
 }

@@ -45,13 +45,13 @@ export function addTexture(texture: string) {
 }
 
 export function getTexturesCode(): string {
-    let code = '\t\tloadTextures({\n';
+    let code = '\t\t\t\tloadTextures({\n';
 
     for(let texture of textures) {
-        code += `\t\t\t{'${texture.variable}', '${texture.texture}'},\n`
+        code += `\t\t\t\t\t\t{'${texture.variable}', '${texture.texture}'},\n`
     }
 
-    code += '\t\t});'
+    code += '\t\t\t\t});'
 
     return code;
 }

@@ -19,6 +19,7 @@ async function exportData() {
     for(let i in urlarguments.files) {
         let file = urlarguments.files[i]
         let content = file.code;
+        content = content.replaceAll('<!newline!>', '\\n');
         let filehandle = await dhandle.getFileHandle(i, { create: true });
         let writeable = await filehandle.createWritable();
         await writeable.write(content);

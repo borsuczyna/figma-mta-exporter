@@ -31,6 +31,9 @@ export function defineVariablePosition(name: string, position: string) {
 }
 
 export function getVariables(): string {
+    let length = 0;
+    for(let name in variables) length++;
+    if(length == 0) return '';
     let code = 'local settings = {\n';
 
     for(let name in variables) {
@@ -87,7 +90,7 @@ export function focusOnElements(frame: SceneNode) {
     figma.currentPage.selection = focusElements;
 }
 
-export function getPosition(position: Position, offset: Offset): string {
+export function getPosition(position: Position, offset: Offset, noWordWrap: boolean = true, textXAlign: string = 'left', textYAlign: string = 'top'): string {
     let x: string | number = position.x;
     let y: string | number = position.y;
     let width: string | number = position.width;
@@ -96,8 +99,41 @@ export function getPosition(position: Position, offset: Offset): string {
     let xAlign = offset.align.charAt(0);
     let yAlign = offset.align.charAt(1);
 
-    if(currentVariable) {
-        return `settings['${currentVariable}'][1] + ${x}${zoom}, settings['${currentVariable}'][2] + ${y}${zoom}, ${width}${zoom}, ${height}${zoom}`
+    if(noWordWrap) {
+        let xs = '', ys = '';
+        if(xAlign == 'L') {
+            if(textXAlign == 'left') xs = `${x}${zoom}`;
+            else if(textXAlign == 'center') xs = `${x + width/2}${zoom}`;
+            else if(textXAlign == 'right') xs = `${x + width}${zoom}`;
+        } else if(xAlign == 'C') {
+            x = x - offset.width/2;
+            if(textXAlign == 'left') xs = `sx/2 + ${x}${zoom}`;
+            else if(textXAlign == 'center') xs = `sx/2 + ${x + width/2}${zoom}`;
+            else if(textXAlign == 'right') xs = `sx/2 + ${x + width}${zoom}`;
+        } else if(xAlign == 'R') {
+            x = offset.width - x;
+            if(textXAlign == 'left') xs = `sx - ${x + width}${zoom}`;
+            else if(textXAlign == 'center') xs = `sx - ${x + width/2}${zoom}`;
+            else if(textXAlign == 'right') xs = `sx - ${x}${zoom}`;
+        }
+
+        if(yAlign == 'T') {
+            if(textYAlign == 'top') ys = `${y}${zoom}`;
+            else if(textYAlign == 'center') ys = `${y + height/2}${zoom}`;
+            else if(textYAlign == 'bottom') ys = `${y + height}${zoom}`;
+        } else if(yAlign == 'M') {
+            y = y - offset.height/2;
+            if(textYAlign == 'top') ys = `sy/2 + ${y}${zoom}`;
+            else if(textYAlign == 'center') ys = `sy/2 + ${y + height/2}${zoom}`;
+            else if(textYAlign == 'bottom') ys = `sy/2 + ${y + height}${zoom}`;
+        } else if(yAlign == 'B') {
+            y = offset.height - y;
+            if(textYAlign == 'top') ys = `sy - ${y + height}${zoom}`;
+            else if(textYAlign == 'center') ys = `sy - ${y + height/2}${zoom}`;
+            else if(textYAlign == 'bottom') ys = `sy - ${y}${zoom}`;
+        }
+
+        return `${xs}, ${ys}, nil, nil`;
     } else {
         if(xAlign == 'L') x = `${x}${zoom}`;
         else if(xAlign == 'C') {
@@ -115,6 +151,10 @@ export function getPosition(position: Position, offset: Offset): string {
         } else if(yAlign == 'B') {
             y = offset.height - y;
             y = `sy - ${y}${zoom}`;
+        }
+
+        if(currentVariable) {
+            return `settings['${currentVariable}'][1] + ${x}${zoom}, settings['${currentVariable}'][2] + ${y}${zoom}, ${width}${zoom}, ${height}${zoom}`
         }
 
         return `${x}, ${y}, ${width}${zoom}, ${height}${zoom}`;
@@ -135,7 +175,7 @@ export function processNode(element: SceneNode, offset: Offset, variable: string
         currentVariable = variable;
     }
     
-    code += `-- ${element.type}: ${element.name} ${currentVariable || ''}\n`;
+    // code += `-- ${element.type}: ${element.name} ${currentVariable || ''}\n`;
 
     if(element.type == 'GROUP' && element.name.startsWith('<single>')) {
         let name = '_single_' + element.name.slice('<single>'.length);
@@ -170,6 +210,18 @@ export function processNode(element: SceneNode, offset: Offset, variable: string
 
     variable = preVariable;
     currentVariable = variable;
+
+    code = code.replace(/\+ -/g, '- ');
+    code = code.replace(/\+ 0\/zoom/g, '');
+    code = code.replace(/- 0\/zoom/g, '');
+    code = code.replace(/\+ 0/g, '');
+    code = code.replace(/- 0/g, '');
+    code = code.replace(/\* 1\/zoom/g, '');
+    code = code.replace(/\/ 1\/zoom/g, '');
+    code = code.replace(/\* 1/g, '');
+    code = code.replace(/\/ 1/g, '');
+    code = code.replace(/(\d+\.\d{3})\d+/g, '$1');
+    code = code.replace(/ ,/g, ',');
 
     return {code, metaCode};
 }

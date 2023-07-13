@@ -4,9 +4,7 @@
   "description": "Your Figma Plugin",
   "main": "code.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "watch": "npm run build -- --watch",
-    "build-new": "webpack",
+    "build": "webpack",
     "backend": "nodemon backend/index.js"
   },
   "author": "",
