@@ -95,7 +95,7 @@ export function focusOnElements(frame: SceneNode) {
     figma.currentPage.selection = focusElements;
 }
 
-export function getPosition(position: Position, offset: Offset, noWordWrap: boolean = true, textXAlign: string = 'left', textYAlign: string = 'top'): string {
+export function getPosition(position: Position, offset: Offset, noWordWrap: boolean = false, textXAlign: string = 'left', textYAlign: string = 'top'): string {
     let x: string | number = position.x;
     let y: string | number = position.y;
     let width: string | number = position.width;
