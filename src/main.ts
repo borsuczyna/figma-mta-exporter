@@ -28,7 +28,7 @@ function exportFrame(frame: FrameNode, align: Align) {
     code = code.slice(0, -1);
     metaCode = metaCode.slice(0, -1);
 
-    code = settings.codeTemplate.replace('<CODE>', code).replace('<TEXTURES>', Textures.getTexturesCode()).replace('<VARIABLES>', Element.getVariables());
+    code = settings.codeTemplate.replace('<CODE>', code).replace('<VARIABLES>', Element.getVariables());
     metaCode = settings.metaTemplate.replace('<FILE_SOURCES>', metaCode);
 
     code = code.trim();
@@ -79,7 +79,6 @@ figma.ui.onmessage = msg => {
         let selection: SceneNode = selections[0];
         if(selection.type != 'FRAME') return figma.notify(translation('no-frame'), {error: true});
 
-        Textures.resetTextures();
         Element.resetVariables();
         Element.resetFocusElements();
         Element.resetCurrentVariable();

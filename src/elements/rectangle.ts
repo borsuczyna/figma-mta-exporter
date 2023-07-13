@@ -32,12 +32,8 @@ export function process(element: RectangleNode, offset: Offset): {code: string, 
     elementPosition = Element.getAbsolutePosition(elementPosition as Position, element.rotation)
     let position = Element.getPosition(elementPosition, offset);
 
-    // Add texture to cache
-    Textures.addTexture(element.name);
-
     // Generate code
-    let variable = `textures.${Textures.variableName(element.name)}`;
-    code = `\tdxDrawImage(${position}, ${variable}.texture)\n`;
+    code = `\tdxDrawImage(${position}, '${Textures.imagePath(element.name)}')\n`;
     metaCode = `\t<file src="${Textures.imagePath(element.name)}"/>\n`;
 
     return {code, metaCode};

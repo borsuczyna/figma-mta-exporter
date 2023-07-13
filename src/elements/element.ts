@@ -211,6 +211,9 @@ export function processNode(element: SceneNode, offset: Offset, variable: string
     variable = preVariable;
     currentVariable = variable;
 
+    // wyjebac loadTextures
+    // nie eksportowac kilka takich samych
+
     code = code.replace(/\+ -/g, '- ');
     code = code.replace(/\+ 0\/zoom/g, '');
     code = code.replace(/- 0\/zoom/g, '');

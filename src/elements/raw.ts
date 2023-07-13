@@ -19,12 +19,8 @@ export function process(element: SceneNode, offset: Offset, name: string): {code
     elementPosition = Element.getAbsolutePosition(elementPosition as Position, 'rotation' in element ? element.rotation : 0);
     let position = Element.getPosition(elementPosition, offset);
 
-    // Add texture to cache
-    Textures.addTexture(name);
-
     // Generate code
-    let variable = `textures.${Textures.getTextureVariable(name)}`;
-    code = `\tdxDrawImage(${position}, ${variable}.texture)\n`;
+    code = `\tdxDrawImage(${position}, '${Textures.imagePath(name)}')\n`;
     metaCode = `\t<file src="${Textures.imagePath(name)}"/>\n`;
 
     return {code, metaCode};

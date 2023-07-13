@@ -15,12 +15,6 @@ function toggleUI(visible)
     local eventCallback = visible and addEventHandler or removeEventHandler
 
     eventCallback('onClientRender', root, renderUI)
-
-    if visible then
-<TEXTURES>
-    else
-        unloadTextures()
-    end
 end
 
 toggleUI(true)`;
@@ -30,14 +24,6 @@ zoom = (sx < 2048) and math.min(2.2, 2048/sx) or 1
 fonts = {
     figmaFonts = {},
 }
-textures = {}
-
-function unloadTextures()
-    for k,v in pairs(textures) do
-        if v and isElement(v) then destroyElement(v) end
-    end
-    textures = {}
-end
 
 function unloadFonts()
     for k,v in pairs(fonts) do
@@ -46,19 +32,6 @@ function unloadFonts()
     fonts = {
         figmaFonts = {},
     }
-end
-
-function loadTextures(array)
-    unloadTextures()
-    for _,v in pairs(array) do
-        local texture = dxCreateTexture(v[2], 'argb', true, 'clamp')
-        local width, height = dxGetMaterialSize(texture)
-        textures[v[1]] = {
-            texture = texture,
-            width = width,
-            height = height,
-        }
-    end
 end
 
 function loadFonts(array)
