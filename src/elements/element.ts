@@ -6,8 +6,10 @@ import * as Rectangle from './rectangle';
 import * as Raw from './raw';
 import * as Variable from './variable';
 import * as Text from './text';
+import { imagePath } from "./textures";
 
 let focusElements: SceneNode[] = [];
+let focusElementsNames: string[] = [];
 let variables: {
     [key: string]: string
 } = {};
@@ -24,6 +26,7 @@ export function setMainFrame(frame: FrameNode) {
 
 export function resetFocusElements() {
     focusElements = [];
+    focusElementsNames = [];
 }
 
 export function defineVariablePosition(name: string, position: string) {
@@ -81,7 +84,9 @@ export function getAbsolutePosition(position: Position, angle: number): Position
     };
 }
 
-function addFocusElement(element: SceneNode) {
+function addFocusElement(element: SceneNode, name: string) {
+    if(focusElementsNames.indexOf(name) != -1) return;
+    focusElementsNames.push(name);
     focusElements.push(element);
 }
 
@@ -183,13 +188,13 @@ export function processNode(element: SceneNode, offset: Offset, variable: string
         code += data.code;
         metaCode += data.metaCode;
 
-        addFocusElement(element);
+        addFocusElement(element, name);
     } else if(isMaskGroup(element) || element.type == 'VECTOR') {
         let data = Raw.process(element, offset, element.name);
         code += data.code;
         metaCode += data.metaCode;
 
-        addFocusElement(element);
+        addFocusElement(element, element.name);
     } else if('children' in element) {
         for(let child of element.children) {
             let data = processNode(child, offset, variable);
@@ -203,7 +208,7 @@ export function processNode(element: SceneNode, offset: Offset, variable: string
         code += data.code;
         metaCode += data.metaCode;
 
-        addFocusElement(element);
+        addFocusElement(element, element.name);
     } else if(element.type == 'TEXT') {
         code += Text.process(element, offset);
     }
