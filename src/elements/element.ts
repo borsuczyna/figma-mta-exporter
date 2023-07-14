@@ -7,6 +7,7 @@ import * as Raw from './raw';
 import * as Variable from './variable';
 import * as Text from './text';
 import { imagePath } from "./textures";
+import { clog } from "../main";
 
 let focusElements: SceneNode[] = [];
 let focusElementsNames: string[] = [];
@@ -182,6 +183,8 @@ export function processNode(element: SceneNode, offset: Offset, variable: string
     
     // code += `-- ${element.type}: ${element.name} ${currentVariable || ''}\n`;
 
+    if(!element.visible) return {code: '', metaCode: ''};
+
     if(element.type == 'GROUP' && element.name.startsWith('<single>')) {
         let name = '_single_' + element.name.slice('<single>'.length);
         let data = Raw.process(element, offset, name);
@@ -211,6 +214,7 @@ export function processNode(element: SceneNode, offset: Offset, variable: string
         addFocusElement(element, element.name);
     } else if(element.type == 'TEXT') {
         code += Text.process(element, offset);
+        clog(Text.process(element, offset));
     }
 
     variable = preVariable;

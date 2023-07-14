@@ -4,7 +4,7 @@ import * as Textures from './elements/textures';
 import { settings } from "./settings";
 import { Offset, Align } from "./Types";
 let cnsl = console;
-let clog = console.log;
+export let clog = console.log;
 
 figma.showUI(__html__, {
     title: 'MTA Exporter 2.0 by @borsuczyna',
@@ -34,7 +34,12 @@ function exportFrame(frame: FrameNode, align: Align) {
     metaCode = settings.metaTemplate.replace('<FILE_SOURCES>', metaCode);
 
     code = code.trim();
+    while(code.includes('<!newline!>')) {
+        code = code.replace('<!newline!>', '\\n');
+    }
 
+    clog(settings.usefulCode);
+    clog(metaCode);
     clog(code);
     figma.notify(translation('code-ready'), {timeout: 3000});
 
