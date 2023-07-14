@@ -1,18 +1,9 @@
-const express = require('express');
-const app = express();
+const ws = require('ws');
+const wss = new ws.Server({ port: 8080 });
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+wss.on('connection', (ws) => {
+    ws.on('message', (message) => {
+        console.log('received: %s', message);
+    });
+    ws.send('something');
 });
-
-app.get('/script.js', (req, res) => {
-    res.sendFile(__dirname + '/script.js');
-});
-
-app.get('/style.css', (req, res) => {
-    res.sendFile(__dirname + '/style.css');
-});
-
-app.listen(8080, () => {
-    console.log('listening');
-})

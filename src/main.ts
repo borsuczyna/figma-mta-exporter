@@ -3,6 +3,8 @@ import * as Element from './elements/element';
 import * as Textures from './elements/textures';
 import { settings } from "./settings";
 import { Offset, Align } from "./Types";
+let cnsl = console;
+let clog = console.log;
 
 figma.showUI(__html__, {
     title: 'MTA Exporter 2.0 by @borsuczyna',
@@ -33,32 +35,8 @@ function exportFrame(frame: FrameNode, align: Align) {
 
     code = code.trim();
 
-    figma.showUI(`<script>
-    function openURL(url, arguments) {
-        var argumentsString = encodeURIComponent(JSON.stringify(arguments));
-        var finalUrl = url + "?arguments=" + argumentsString;
-        window.open(finalUrl, "_blank");
-    }
-
-    openURL('http://localhost:8080/', {
-        files: {
-            'meta.xml': {
-                code: \`${metaCode}\`,
-                lang: 'xml',
-            },
-            'client.lua': {
-                code: \`${code}\`,
-                lang: 'lua',
-            },
-            'useful.lua': {
-                code: \`${settings.usefulCode}\`,
-                lang: 'lua',
-            },
-        }
-    });
-    </script>`, {
-        visible: false
-    });
+    clog(code);
+    figma.notify(translation('code-ready'), {timeout: 3000});
 
     setTimeout(() => {
         figma.showUI(__html__, {

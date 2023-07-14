@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mta-exporter.mtasa.eu</title>
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <h2>MTA Exporter</h2>
+    <h2 class="blur">MTA Exporter</h2>
+    <h5>discord: @borsuczyna</h5>
+
+    <div id="files">
+        <div class="file-header">
+            <div>id</div>
+            <div>uploaded</div>
+            <div>expires</div>
+            <div id="empty"></div>
+        </div>
+
+        <% for (let i = 0; i < data.length; i++) { %>
+            <% for(let j = 0; j < 10; j++) { %>
+                <div class="file">
+                    <div class="id"><%= data[i].id %></div>
+                    <div class="moment"><%= data[i].uploadDate.getTime() %></div>
+                    <div class="moment"><%= data[i].expireDate.getTime() %></div>
+                    <button onclick="deleteExport(<%= data[i].id %>)">remove</button>
+                    <button onclick="download(<%= data[i].id %>)">export</button>
+                </div>
+            <% } %>
+        <% } %>
+    </div>
+    
+    <link href="https://fonts.cdnfonts.com/css/inter" rel="stylesheet">
+</body>
+</html>
