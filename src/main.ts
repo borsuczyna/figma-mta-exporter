@@ -37,6 +37,11 @@ function exportFrame(frame: FrameNode, align: Align) {
     while(code.includes('<!newline!>')) {
         code = code.replace('<!newline!>', '\\n');
     }
+    
+    // replace all /zoom/zoom to /zoom
+    code = code.replace(/\/zoom\/zoom/g, '/zoom');
+    // replace all + - to -
+    code = code.replace(/\+ -/g, '-');
 
     clog(settings.usefulCode);
     clog(metaCode);
